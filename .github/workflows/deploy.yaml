@@ -11,15 +11,15 @@ jobs:
       steps:
         - name: Cloning code
           uses: actions/checkout@v7.0.0
-        - name: echo
-          run: echo "Hello"
         - name: List code space 
           run: ls
-        - name: "Configure AWS Credentials" 
+        - name: Configure AWS Credentials 
           uses: aws-actions/configure-aws-credentials@v6.2.2
           with:
             audience: sts.amazonaws.com
             aws-region: ap-south-1
             role-to-assume: arn:aws:iam::794038225665:role/github-actions
-        - name: list s3
+        - name: List s3 buckets
           run: aws s3 ls
+        - name: Deploy code on s3
+          run: aws s3 sync . s3://portfolio-actions-github --delete

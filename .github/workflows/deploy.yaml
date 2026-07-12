@@ -1,0 +1,17 @@
+name: Deployflow
+on: 
+  push:
+    branches:
+    - main
+
+jobs:
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - name: clone
+          uses: actions/chekout@v5
+        - name: echo
+          run: echo "Hello"
+        - name: ls
+          run: ls
+    

@@ -15,7 +15,11 @@ jobs:
           run: echo "Hello"
         - name: List code space 
           run: ls
-        - name: Configure aws
-          uses: aws-actions/configure-aws-credentials
+        - name: "Configure AWS Credentials" 
+          uses: aws-actions/configure-aws-credentials@v6.2.2
+          with:
+            audience: sts.amazonaws.com
+            aws-region: ap-south-1
+            role-to-assume: arn:aws:iam::794038225665:role/github-actions
         - name: list s3
           run: aws s3 list

@@ -3,15 +3,18 @@ on:
   push:
     branches:
     - main
-
+permissions:
+  id-token: write 
 jobs:
     deploy:
       runs-on: ubuntu-latest
       steps:
         - name: Cloning code
           uses: actions/checkout@v7.0.0
-        - name: echo
-          run: echo "Hello"
         - name: List code space 
           run: ls
+        - name: Configure aws
+          uses: aws-actions/configure-aws-credentials
+        - name: list s3
+          run: aws s3 list
     

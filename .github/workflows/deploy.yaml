@@ -29,3 +29,14 @@ jobs:
               --exclude ".github/*" \
               --exclude ".gitignore" \
               --exclude "README.md"
+        - name: Deploy on EC2 using SSM
+          run: |
+            aws ssm send-command \
+              --document-name "AWS-RunShellScript" \
+              --targets "Key=InstanceIds,Values=i-06f542de1eaa8f214" \
+              --comment "Deploy latest application" \
+              --parameters 'commands=[
+                "cd /var/www/html",
+                "sudo aws s3 sync s3://portfolio-actions-github . --delete",
+                "sudo systemctl restart nginx"
+              ]'

@@ -21,5 +21,11 @@ jobs:
             role-to-assume: arn:aws:iam::794038225665:role/github-actions
         - name: List s3 buckets
           run: aws s3 ls
-        - name: Deploy code on s3
-          run: aws s3 sync . s3://portfolio-actions-github --delete
+        - name: Upload application to S3
+          run: |
+            aws s3 sync . s3://portfolio-actions-github \
+              --delete \
+              --exclude ".git/*" \
+              --exclude ".github/*" \
+              --exclude ".gitignore" \
+              --exclude "README.md"

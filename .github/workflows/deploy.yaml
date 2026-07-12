@@ -8,10 +8,10 @@ jobs:
     deploy:
       runs-on: ubuntu-latest
       steps:
-        - name: clone
-          uses: actions/chekout@v5
+        - name: Cloning code
+          uses: actions/checkout@v7.0.0
         - name: echo
           run: echo "Hello"
-        - name: ls
+        - name: List code space 
           run: ls
     

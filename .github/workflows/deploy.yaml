@@ -1,41 +1,51 @@
 name: Deployflow
-on: 
+
+on:
   push:
     branches:
-    - main
+      - main
+  workflow_dispatch:
+
 permissions:
-  id-token: write 
+  id-token: write
+
 jobs:
-    deploy:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Cloning code
-          uses: actions/checkout@v7.0.0
-        - name: List code space 
-          run: ls
-        - name: Configure AWS Credentials 
-          uses: aws-actions/configure-aws-credentials@v6.2.2
-          with:
-            audience: sts.amazonaws.com
-            aws-region: ap-south-1
-            role-to-assume: arn:aws:iam::794038225665:role/github-actions
-        - name: List s3 buckets
-          run: aws s3 ls
-        - name: Upload application to S3
-          run: |
-            aws s3 sync . s3://portfolio-actions-github \
-              --delete \
-              --exclude ".git/*" \
-              --exclude ".github/*" \
-              --exclude ".gitignore" \
-              --exclude "README.md"
-        - name: Deploy on EC2 using SSM
-          run: |
-            aws ssm send-command \
-              --document-name "AWS-RunShellScript" \
-              --targets "Key=InstanceIds,Values=i-06f542de1eaa8f214" \
-              --comment "Deploy latest application" \
-              --parameters 'commands=[
-                "sudo aws s3 sync s3://portfolio-actions-github /usr/share/nginx/html --delete",
-                "sudo systemctl restart nginx"
-              ]'
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cloning code
+        uses: actions/checkout@v7.0.0
+
+      - name: List code space
+        run: ls
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.2.2
+        with:
+          audience: sts.amazonaws.com
+          aws-region: ap-south-1
+          role-to-assume: arn:aws:iam::794038225665:role/github-actions
+
+      - name: List S3 buckets
+        run: aws s3 ls
+
+      - name: Upload application to S3
+        run: |
+          aws s3 sync . s3://portfolio-actions-github \
+            --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude ".gitignore" \
+            --exclude "README.md"
+
+      - name: Deploy on EC2 using SSM
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --targets "Key=InstanceIds,Values=i-06f542de1eaa8f214" \
+            --comment "Deploy latest application" \
+            --parameters 'commands=[
+              "sudo aws s3 sync s3://portfolio-actions-github /usr/share/nginx/html --delete",
+              "sudo systemctl restart nginx"
+            ]'

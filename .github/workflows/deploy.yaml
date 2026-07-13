@@ -43,7 +43,7 @@ jobs:
         run: |
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --targets "Key=InstanceIds,Values=i-0cd7486dd85d0db20" \
+            --targets "Key=InstanceIds,Values=i-051c44a10f60dfd91" \
             --comment "Deploy latest application" \
             --parameters 'commands=[
               "date",

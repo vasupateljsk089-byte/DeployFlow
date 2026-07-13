@@ -43,9 +43,10 @@ jobs:
         run: |
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --targets "Key=InstanceIds,Values=i-06f542de1eaa8f214" \
+            --targets "Key=InstanceIds,Values=i-0cd7486dd85d0db20" \
             --comment "Deploy latest application" \
             --parameters 'commands=[
+              "sudo aws s3 sync s3://portfolio-actions-github / --delete",
               "sudo aws s3 sync s3://portfolio-actions-github /usr/share/nginx/html --delete",
               "sudo systemctl restart nginx"
             ]'
